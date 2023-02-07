@@ -1,0 +1,81 @@
+<!-- Spinner Start -->
+<div id="spinner" class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
+  <div class="spinner-grow text-primary" style="width: 3rem; height: 3rem;" role="status">
+      <span class="sr-only">Loading...</span>
+  </div>
+</div>
+<!-- Spinner End -->
+
+ <!-- Navbar Start -->
+ <header id="appoint">
+    <nav class="navbar navbar-expand-lg bg-white navbar-light sticky-top p-0 wow fadeIn" data-wow-delay="0.1s">
+        <a href="index.html" class="navbar-brand d-flex align-items-center px-4 px-lg-5">
+            <h1 class="m-0 text-primary"><i class="far fa-hospital me-3"></i>Care Clinic</h1>
+        </a>
+        <button type="button" class="navbar-toggler me-4" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarCollapse">
+            <div class="navbar-nav ms-auto p-4 p-lg-0">
+                <a href="/" class="nav-item nav-link active">Home</a>
+                <a href="about.html" class="nav-item nav-link">About</a>
+                <!-- <a href="about.html" class="nav-item nav-link">Your Appointments</a> -->
+                <div class="nav-item dropdown">
+                    <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Services</a>
+                    <div class="dropdown-menu rounded-0 rounded-bottom m-0">
+                        <a href="feature.html" class="dropdown-item">Cardiology</a>
+                        <a href="team.html" class="dropdown-item">Pulmonary</a>
+                        <a href="appointment.html" class="dropdown-item">Neorology</a>
+                        <a href="testimonial.html" class="dropdown-item">Orthopedics</a>
+                        <a href="404.html" class="dropdown-item">Dental Suragery</a>
+                    </div>
+                </div>
+                <a href="contact.html" class="nav-item nav-link">Contact</a>
+            </div>
+                    <div class="nav-item dropdown">
+                      <img
+                        src="https://mdbcdn.b-cdn.net/img/new/avatars/2.webp"
+                        class="rounded-circle justify-content-center"
+                        height="25"
+                        alt=""
+                        loading="lazy"
+                      />
+                      <div class="dropdown-menu rounded-0 rounded-bottom m-0">
+                          <a href="feature.html" class="dropdown-item">Your Profile</a>
+                          <a href="/logout" class="dropdown-item">Logout</a>
+                      </div>
+                  </div>
+                  </div>
+                </div>
+              
+            
+            <a href="/appointment" class="btn btn-primary rounded-0 py-4 px-lg-5 d-none d-lg-block">Appointment<i class="fa fa-arrow-right ms-3"></i></a>
+        </div>
+    </nav>
+    </header>
+
+  <br>
+<h2 class="text-center">Appointments list</h2>
+<div class="container-fluid row">
+<% books.forEach(el=>{%>
+<div class="card col-md-3 mx-3">
+  <img class="rounded-circle me-lg-2" src="https://mdbcdn.b-cdn.net/img/new/standard/nature/184.webp" class="card-img-top" alt="" style="width: 100px; height: 100px;"/>
+  <div class="card-body">
+    <h6 class="card-title">NAME: <%=el.name %></h6>
+    <h6 class="card-title">AGE: <%=el.Age %> </h6>
+    <h6 class="card-title">EMAIL: <%=el.email %></h6>
+    <h6 class="card-title">PHONE: <%=el.ph %></h6>
+    <h6 class="card-title">DOCTOR: <%=el.doctor %></h6>
+    <h6 class="card-title">Speciality: <%=el.speciality%></h6>
+    <h6 class="card-title">DATE: <%=el.date.toLocaleString()%></h6>
+    <h6 class="card-title">DISEASES: <%=el.diseases %></h6>
+    <br>
+    <p class="text-success fw-bold">Confirmed</p>
+   
+  </div>
+</div>
+<%}) %> 
+</div>
+
+
+<%- include('./partials/footer.ejs') %>

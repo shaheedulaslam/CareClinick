@@ -1,0 +1,68 @@
+ <!-- Navbar Start -->
+<header>
+<nav class="navbar navbar-expand-lg bg-white navbar-light sticky-top p-0 wow fadeIn" data-wow-delay="0.1s">
+    <a href="index.html" class="navbar-brand d-flex align-items-center px-4 px-lg-5">
+        <h1 class="m-0 text-primary"><i class="far fa-hospital me-3"></i>Care Clinick</h1>
+    </a>
+    <button type="button" class="navbar-toggler me-4" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarCollapse">
+        <div class="navbar-nav ms-auto p-4 p-lg-0">
+            <a href="/" class="nav-item nav-link active">Home</a>
+            <a href="/about" class="nav-item nav-link">About</a>
+            <a href="/contactus" class="nav-item nav-link">Contact</a>
+             <!-- Notification dropdown -->
+      <li class="nav-item dropdown">
+        <a
+          class="nav-link dropdown-toggle hidden-arrow"
+          href="#"
+          id="navbarDropdownMenuLink"
+          role="button"
+          data-mdb-toggle="dropdown"
+          aria-expanded="false"
+        >
+          <i class="fas fa-bell"></i>
+          <span class="badge rounded-pill badge-notification bg-danger"><%=msg%></span>
+        </a>
+        <ul
+          class="dropdown-menu dropdown-menu-end"
+          aria-labelledby="navbarDropdownMenuLink"
+        >
+          <li>
+            <p class="dropdown-item">Doctors  <span class="badge rounded-pill badge-notification bg-primary"><%=doccount%></span></p>
+          </li>
+          <li>
+            <a class="dropdown-item" href="/appointlists">Appointments  <span class="badge rounded-pill badge-notification bg-primary"><%=appointcount%></span></a>
+          </li>
+        </ul>
+      </li>
+           
+        </div>
+        <% if(user){ %>
+                <div class="nav-item dropdown">
+                  <img
+                    src="https://mdbcdn.b-cdn.net/img/new/avatars/2.webp"
+                    class="rounded-circle justify-content-center"
+                    height="25"
+                    alt=""
+                    loading="lazy"
+                  />
+                  <div class="dropdown-menu rounded-0 rounded-bottom m-0">
+                      <a href="/profile/<%=bio._id%>" class="dropdown-item">Your Profile</a>
+                      <a href="/logout" class="dropdown-item">Logout</a>
+                  </div>
+              </div>
+              </div>
+            </div>
+        <% }else{}%>
+        <a href="/appointment" class="btn btn-primary rounded-0 py-4 px-lg-5 d-none d-lg-block">Appointment<i class="fa fa-arrow-right ms-3"></i></a>
+    </div>
+</nav>
+</header>
+<!-- Navbar End --> 
+
+<!-- content -->
+
+
+ 

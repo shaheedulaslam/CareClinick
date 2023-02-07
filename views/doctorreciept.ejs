@@ -1,0 +1,31 @@
+<!-- Spinner Start -->
+<div id="spinner" class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
+    <div class="spinner-grow text-primary" style="width: 3rem; height: 3rem;" role="status">
+        <span class="sr-only">Loading...</span>
+    </div>
+</div>
+<!-- Spinner End -->
+
+<%- include('./partials/headerdoctor.ejs') %>
+<div class="container-fluid">
+<h2 class="mb-5 text-center">Medicine Prescription</h2>
+
+<form action="/doctor/consultedresult/<%=consultfrm._id%>" method="post">
+<div class="row g-3 ms-3 mt-2">
+   
+    <div class="col-12 col-sm-3">
+        <input type="text" class="form-control border-0" placeholder="Your Name" value="<%=consultfrm.name%>"  name="name" style="height: 55px; background-color: rgb(238, 233, 233);" required>
+    </div>
+    <div class="col-12 col-sm-3">
+        <input type="number" class="form-control border-0" placeholder="Your Age" value="<%=consultfrm.Age%>" name="Age" style="height: 55px;background-color: rgb(238, 233, 233);" required>
+    </div> <br>
+    <div class="col-12">
+        <textarea class="form-control border-0 w-50" rows="5" placeholder="Prescriptions" name="prescription" style="background-color:rgb(238, 233, 233); ;" required></textarea>
+    </div>
+     <div class="col-12">
+        <button type="submit" class="btn btn-primary"> Submit</button>
+    </div>
+  
+</div>
+</form>
+</div>
