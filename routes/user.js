@@ -26,7 +26,9 @@ const { getHome,
         forgetPassword,
         postforgetPassword,
         resetPassword,
-        postresetPassword} = require('../controllers/UserControllers');
+        postresetPassword,
+        getReports,
+        ERROR} = require('../controllers/UserControllers');
 
 
 
@@ -58,6 +60,8 @@ router.post('/selected',selectedAppoint);
 router.get('/forgetpassword',forgetPassword);
 router.post('/forgetpassword',postforgetPassword);
 router.get('/resetPassword/:id',resetPassword);
-// router.post('/resetPassword',postresetPassword);
+router.post('/resetPassword',postresetPassword);
+router.get('/medical-Reports',getReports);
+router.get('/404error',ERROR);
 
 module.exports = router

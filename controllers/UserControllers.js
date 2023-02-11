@@ -19,8 +19,8 @@ const transporter = nodemailer.createTransport({
     host: 'smtp.gmail.com',
   port: 587,
   auth: {
-      user: 'careclinick@gmail.com',
-      pass: 'emazmmogyyruxpqv'
+      user: process.env.user,
+      pass: process.env.pass
   } 
 })
 
@@ -36,15 +36,13 @@ module.exports = {
         const appointcount = await appointmodel.find({user:userId}).count();
         const patients = await appointmodel.count();
         const bio = await Usermodel.findOne({_id:userId});
+        const reports = await appointmodel.find({user:userId,consultations:"consulted"}).count()
         console.log(doccount,' '+"doctor added");
         console.log(appointcount,' '+"appoint added");
-        const msg = doccount+appointcount
+        const msg = doccount+appointcount+reports
         adddoctorsmodel.find().then(doclist=>{
-            res.render('index', {user: req.session.logg,doclist,msg,appointcount,doccount,patients,bio,doctors});
+            res.render('user/index', {user: req.session.logg,doclist,msg,appointcount,doccount,patients,bio,doctors,reports});
         })
-        .catch(err=>{
-            console.log(err);
-        })   
         } catch (error) {
             console.log(error);
         }  
@@ -55,30 +53,35 @@ module.exports = {
             res.redirect('/login')
         } else {
             const error = req.session.loggerr
-            res.render('login', { base_url: process.env.APP_URL, user: '', user: false, login: false, error })
+            res.render('user/login', { base_url: process.env.APP_URL, user: '', user: false, login: false, error })
             req.session.loggerr = null
         }
     },
     postLogin: async (req, res) => {
-        
-        let Email = req.body.email
-        let PASS = req.body.password
-        const user = await Usermodel.findOne({ email: Email})
-        if (user && user.access){
-            console.log(user);
-            let data = await bcrypt.compare(PASS, user.password)
-            if (data) {
-                req.session.logg = user
-                res.redirect('/')
+        try {
+            let Email = req.body.email
+            let PASS = req.body.password
+            const user = await Usermodel.findOne({ email: Email})
+            if (user && user.access){
+                console.log(user);
+                let data = await bcrypt.compare(PASS, user.password)
+                if (data) {
+                    req.session.logg = user
+                    res.redirect('/')
+                }
+            } else {
+                req.session.loggerr = "Invalid Email or Password"
+                res.redirect('/login')
+    
             }
-        } else {
-            req.session.loggerr = "Invalid Email or Password"
-            res.redirect('/login')
-
+        } catch (error) {
+            console.log(error);
+            res.redirect('/404error')
         }
+       
     },
     getsignup: (req, res) => {
-        res.render('signup', { base_url: process.env.APP_URL, user: '' })
+        res.render('user/signup', { base_url: process.env.APP_URL, user: '' })
     },
     postSignup: async (req, res) => {
         const { name, email, password, confirmPass } = req.body;
@@ -106,22 +109,24 @@ module.exports = {
                     subject: 'Signup Verification',
                     html: `<h4>This your token for OTP Verfication </h4>:<h2>${val}</h2>`
                 }) 
-                res.render('signupotp')
+                res.render('user/signupotp')
 
             }
             console.log(req.body);
 
         } catch (err) {
             console.log(err)
+            res.redirect('/404error')
         }
     },
     getappointment:async(req, res) => {
         try {
             await adddoctorsmodel.find().then(result=>{
-                res.render('appointment', { base_url: process.env.APP_URL, user: '',result})
+                res.render('user/appointment', { base_url: process.env.APP_URL, user: '',result})
             })
         } catch (error) {
             console.log(error);
+            res.redirect('/404error')
         }
         
     },
@@ -158,29 +163,29 @@ module.exports = {
                 res.redirect('/appointment')
                 return transporter.sendMail({
                     to: email,
-                    from: 'careclinick@gmail.com',
+                    from: process.env.user,
                     subject: 'Appointment Status',
                     html: `<h1>${result.name}.. Your appointment is Successfully placed! for ${result.speciality} Department</h1>`
                 })
                 
             })
-                .catch(err => {
-                    console.log(err);
-                })
-    
         } catch (error) {
             console.log(error);
+            res.redirect('/404error')
         }
        
     },
-    getappointlists: (req, res) => {
+    getappointlists:async(req, res) => {
+        try {
         const userId = req.session.logg;
-        appointmodel.find({ user: userId}).then(books => {
-            res.render('appointlists', { books });
+      await appointmodel.find({ user: userId}).then(books => {
+            res.render('user/appointlists', { books });
         })
-        .catch(err=>{
-            console.log(err);
-        })
+        } catch (error) {
+            console.log(error);
+            res.redirect('/404error')
+        }
+       
       
     },
     getverify: (req, res) => {
@@ -191,15 +196,16 @@ module.exports = {
                 var val = Math.floor(1000 + Math.random() * 9000);
                     transporter.sendMail({
                         to: email,
-                        from: 'careclinick@gmail.com',
+                        from: process.env.user,
                         subject: 'Signup Verification',
                         html: `<h4>This your token for OTP Verfication </h4>:<h2>${val}</h2>`
                     })
             }
             req.session.signup.token=val
-            res.render('signupotp')
+            res.render('user/signupotp')
         } catch (error) {
             console.log(error);
+            res.redirect('/404error')
         }
 
     },
@@ -221,24 +227,33 @@ module.exports = {
         }
         } catch (error) {
             console.log(error);
+            res.redirect('/404error')
         }
         
     },
     getpayment:async(req,res)=>{
-        const payId = req.params.id;
-        const dctr =  req.params.dr;
-        console.log(dctr,"uuuuuuuuu");
-        console.log(payId);
-       await appointmodel.findOne({_id:payId}).then(payee=>{
-            console.log(payee,"aaaa okkk");
-            res.render('payment',{payee,dctr})
-        })
-        .catch(err=>{
-            console.log(err);
-        })
+        try {
+            if(req.session.logg){
+            const payId = req.params.id;
+            const dctr =  req.params.dr;
+            console.log(dctr,"uuuuuuuuu");
+            console.log(payId);
+           await appointmodel.findOne({_id:payId}).then(payee=>{
+                console.log(payee,"aaaa okkk");
+                res.render('user/payment',{payee,dctr})
+            })
+            }else{
+                res.redirect('/login')
+            }   
+        } catch (error) {
+            console.log(error);
+            res.redirect('/404error');
+        }
+       
       
     },
-    postpayment:async(req,res)=>{       
+    postpayment:async(req,res)=>{    
+    try {
     const status = req.body['payment-method'] ==='COC'?'placed':'pending'
     console.log(req.body.dctr);
     const bookpay = new order({
@@ -258,13 +273,14 @@ module.exports = {
                 console.log(response,"diiiiiiiiiiiiiiiiiiii");
                  res.json({response})
             })
-            .catch(err => {
-                console.log(err);
-            })
         }
         console.log(bookpay,'booking completed'); 
     })
-
+        } catch (error) {
+           console.log(error);
+           res.redirect('/404error'); 
+        }   
+    
     },
     verifyPayment:(req,res,next)=>{
     console.log(req.body);
@@ -288,8 +304,8 @@ module.exports = {
           })
           await admin.save();
           console.log(admin);
-          const docadding = await adddoctorsmodel.findOneAndUpdate({_id:docId.trim()},{$set:{wallet:docAmount}})
-          const adminadd = await adminearns.findOneAndUpdate({email:'CareClinic@gmail.com'},{$set:{wallet:adminAmount}})
+          const docadding = await adddoctorsmodel.findOneAndUpdate({_id:docId.trim()},{$inc:{wallet:docAmount}})
+          const adminadd = await adminearns.findOneAndUpdate({email:'CareClinic@gmail.com'},{$inc:{wallet:adminAmount}})
           console.log(docadding,"nonn");
           console.log(adminadd,"hhggggg");
               res.json({status:true})
@@ -301,37 +317,48 @@ module.exports = {
             })
         }catch(e){
             next(new Error(e))
+            res.redirect('/404error')
         }
     },
      success:(req,res)=>{
         try{
-            res.render('success',{user:false})
+            res.render('user/success',{user:false})
         }catch(err){
             console.log(err);
+            res.redirect('/404error')
         }
      },
      profile:async(req,res)=>{
-         const uzer = req.session.logg
-         const profId = req.params.id
-        await Usermodel.findById(profId).then(bio=>{
-            res.render('profile',{uzer,bio})
-        })
-        .catch(err => {
-            console.log(err);
-        })
+        try {
+            const uzer = req.session.logg
+            const profId = req.params.id
+           await Usermodel.findById(profId).then(bio=>{
+               res.render('user/profile',{uzer,bio})
+           })
+        } catch (error) {
+            console.log(error);
+            res.redirect('/404error')
+        } 
+        
        
      },
      editprofile:async(req,res)=>{
-        const edId = req.params.id
-        await Usermodel.findOne({_id:edId}).then(el=>{
-            res.render('editprofile',{el});
-        }).catch(err=>{
-            console.log(err);
-        })
-       
+        try {
+            if(req.session.logg){
+                const edId = req.params.id
+                await Usermodel.findOne({_id:edId}).then(el=>{
+                res.render('user/editprofile',{el});
+                })
+            }else{
+                res.redirect('/login')
+            }
+        } catch (error) {
+            console.log(error); 
+            res.redirect('/404error')
+        }  
      },
      postprofile:async(req,res)=>{
-        
+        try {
         const bioId = req.params.id
         const  name = req.body.name
         const email = req.body.email
@@ -357,28 +384,40 @@ module.exports = {
           }).then((result)=>{
             console.log(result,"updated"); 
             res.redirect(`/profile/${bioId}`);
-        }).catch((error)=>{
-            console.log(error);
         })
+        } catch (error) {
+            console.log(error);
+            res.redirect('/404error')
+        }
+        
+        
      },
      about:async(req,res)=>{
         try {
         const userId = req.session.logg;
         const doccount = await adddoctorsmodel.count();
         const appointcount = await appointmodel.find({user:userId}).count();
-        const msg = doccount+appointcount
+        const reports = await appointmodel.find({user:userId,consultations:"consulted"}).count()
+        const msg = doccount+appointcount+reports
         const bio = await Usermodel.findOne({_id:userId});
-        res.render('about',{user:req.session.logg,msg,doccount,appointcount,bio});
+        res.render('user/about',{user:req.session.logg,msg,doccount,appointcount,bio,reports});
         } catch (error) {
             console.log(error);
+            res.redirect('/404error')
         }
        
      },
      contactus:async(req,res)=>{
-        const userid = req.session.logg
-        await Usermodel.findOne({_id:userid}).then(user=>{
-            res.render('contactus',{user})
-        })
+        try {
+            const userid = req.session.logg
+            await Usermodel.findOne({_id:userid}).then(user=>{
+                res.render('user/contactus',{user})
+            })
+        } catch (error) {
+            console.log(error);
+            res.redirect('/404error')
+        }
+       
         
      },
      contactUspost:(req,res)=>{
@@ -387,7 +426,7 @@ module.exports = {
         const email = req.body.email
         const message = req.body.Address
          transporter.sendMail({
-            to:"careclinick@gmail.com",
+            to: process.env.user,
             from:email,
             subject:email,
             html:`<h4>${message}</h4>`
@@ -396,6 +435,7 @@ module.exports = {
         res.redirect('/contactUs');
      } catch (error) {
        console.log(error); 
+       res.redirect('/404error')
      }
      },
     selectedAppoint:async(req,res)=>{
@@ -406,49 +446,93 @@ module.exports = {
     res.json({doc}) 
     } catch (error) {
         console.log(error);
+        res.redirect('/404error')
     }
      },
     forgetPassword :(req,res)=>{
-        res.render('forgetpassword',{user: false, login: false});
+        res.render('user/forgetpassword',{user: false, login: false});
     },
     postforgetPassword:async(req,res)=>{
-        const email = req.body.email
-        await Usermodel.findOne({email:email}).then(users=>{
-            if(users){
-                res.redirect('/')
-                transporter.sendMail({
-                    to:[users.email],
-                    from:'careclinick@gmail.com',
-                    subject:'Password Reset',
-                    html:`<h4>To reset Your Password <a href="http://localhost:3000/resetPassword/${users._id}">Click Here</a>`
-                })  
-            }else{
-                res.redirect('/forgetpassword')
-            }
-        })
+        try {
+            const email = req.body.email
+            await Usermodel.findOne({email:email}).then(users=>{
+                if(users){
+                    res.redirect('/')
+                    transporter.sendMail({
+                        to:[users.email],
+                        from: process.env.user,
+                        subject:'Password Reset',
+                        html:`<h4>To reset Your Password <a href="http://localhost:3000/resetPassword/${users._id}">Click Here</a>`
+                    })  
+                }else{
+                    res.redirect('/forgetpassword')
+                }
+            })
+        } catch (error) {
+            console.log(error);
+             res.redirect('/404error')
+        }
+       
     },
     resetPassword:async(req,res)=>{
-        const authId = req.params.id
+        try {
+            const authId = req.params.id
+        console.log(authId,"authrrrrrrrrr")
         await Usermodel.findOne({_id:authId}).then(auth=>{
-            res.render('resetPassword',{auth});
+            res.render('user/resetPassword',{auth});
         })
+        } catch (error) {
+            console.log(error);
+            res.redirect('/404error')
+        }
+        
         
     },
-    // postresetPassword:async(req,res)=>{
-    //     let update
-    //     const auth = req.body.userid
-    //     const pass =req.body.password
-    //     const pass1 = req.body.password1
+    postresetPassword:async(req,res)=>{
+        try {
+            const auth = req.body.userid
+            const pass =req.body.password
+            const hash  = await bcrypt.hash(pass,10)
+            const user = await Usermodel.findOne({_id:auth})
+            await Usermodel.updateOne({_id:auth},{$set:{password:hash}},{new:true}).then(result=>{
+              console.log(result,"password update");
+              res.redirect('/login');
+              transporter.sendMail({
+                to:[user.email],
+                from:process.env.user,
+                subject:'Status Of reset Password',
+                html:`<h2>Your Password Is Successfully Updated</h2>`   
+              })
+            })
+        } catch (error) {
+            console.log(error);
+            res.redirect('/404error');
+        }
+       
+    },
+    getReports:async(req,res)=>{
+        try {
+            const userId = req.session.logg;
+        const doccount = await adddoctorsmodel.count();
+        const appointcount = await appointmodel.find({user:userId}).count();
+        const reports = await appointmodel.find({user:userId,consultations:"consulted"}).count()
+        const msg = doccount+appointcount+reports
+        const bio = await Usermodel.findOne({_id:userId});
+      await  appointmodel.find({consultations:"consulted",user: userId}).then(result=>{
+            console.log(result,"medical reports");
+            res.render('user/medical-Reports',{user:req.session.logg,result,msg,bio,doccount,appointcount,reports})
+        })
+        } catch (error) {
+            console.log(error);
+            res.redirect('/404error');
+        }
+        
+    },
+    ERROR:(req,res)=>{
+        res.render("404")
+    }
 
-    //     await Usermodel.findOne({_id:auth}).then(users=>{
-    //         users.updateOne({_id:auth})
-    //         return bcrypt.hash(pass,10)
-    //     })
-    // },
-
-
-     
-
+    
 }
 
 

@@ -14,7 +14,11 @@ const { doctorLogin,
         logout,
         docprofile,
         editdocProfile,
-        posteditdocPrfile} = require('../controllers/doctorControllers');
+        posteditdocPrfile,
+        docforgetPassword,
+        postdocforgetPassword,
+        resetdocPassword,
+        postresetdocPassword} = require('../controllers/doctorControllers');
 const router = express.Router();
 
 //get doctor panel
@@ -34,9 +38,11 @@ router.post('/consultedresult/:id',consultedresult);
 router.get ('/logout',logout);
 router.get('/doctorProfile/:id',docprofile);
 router.get('/editdocProfile/:id',editdocProfile);
-router.post('/editdocProfile/:id',posteditdocPrfile)
-
-
+router.post('/editdocProfile/:id',posteditdocPrfile);
+router.get('/doc-forgetPassword',docforgetPassword);
+router.post('/doc-forgetPassword',postdocforgetPassword);
+router.get('/reset-docPassword/:id',resetdocPassword);
+router.post('/reset-docPassword',postresetdocPassword);
 
 
 

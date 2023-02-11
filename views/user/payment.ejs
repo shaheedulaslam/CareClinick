@@ -1,0 +1,185 @@
+<!-- Spinner Start -->
+<div id="spinner" class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
+    <div class="spinner-grow text-primary" style="width: 3rem; height: 3rem;" role="status">
+        <span class="sr-only">Loading...</span>
+    </div>
+</div>
+<!-- Spinner End -->
+
+<!-- constent -->
+
+<h2 class="text-center mt-4">Payment Form</h2>
+<!-- Appointment Start -->
+<div class="container-xxl py-5">
+  <div class="container">
+    <div class="row g-5">
+      <div class="col-lg-6 wow fadeInUp" data-wow-delay="0.1s">
+        <p class="d-inline-block border rounded-pill py-1 px-4">Appointment</p>
+        <h1 class="mb-4">Make An Appointment To Visit Our Doctor</h1>
+        <div class="bg-light rounded d-flex align-items-center p-5 mb-4">
+          <div
+            class="d-flex flex-shrink-0 align-items-center justify-content-center rounded-circle bg-white"
+            style="width: 55px; height: 55px"
+          >
+            <i class="fa fa-phone-alt text-primary"></i>
+          </div>
+          <div class="ms-4">
+            <p class="mb-2">Call Us Now</p>
+            <h5 class="mb-0">+012 345 6789</h5>
+          </div>
+        </div>
+        <div class="bg-light rounded d-flex align-items-center p-5">
+          <div
+            class="d-flex flex-shrink-0 align-items-center justify-content-center rounded-circle bg-white"
+            style="width: 55px; height: 55px"
+          >
+            <i class="fa fa-envelope-open text-primary"></i>
+          </div>
+          <div class="ms-4">
+            <p class="mb-2">Mail Us Now</p>
+            <h5 class="mb-0">CareClinic@gmail.com</h5>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-6 wow fadeInUp" data-wow-delay="0.5s">
+        <div class="bg-light rounded h-100 d-flex align-items-center p-5">
+          <form action="/verify-payment" method="post" id="checkout">
+            <div class="row g-3">
+              <input type="text" value="<%=dctr%>" name="dctr" hidden>
+              <div class="col-12 col-sm-6">
+                <input
+                  type="text"
+                  class="form-control border-0"
+                  placeholder="Your Name"
+                  value="<%=payee.name%>"
+                  name="name"
+                  style="height: 55px"
+                  required
+                />
+              </div>
+              <div class="col-12 col-sm-6">
+                <input
+                  type="tel"
+                  class="form-control border-0"
+                  placeholder="Your Mobile"
+                  value="<%=payee.ph%>"
+                  name="phone"
+                  minlength="0"
+                  maxlength="10"
+                  style="height: 55px"
+                  required
+                />
+              </div>
+              <input
+                type="text"
+                name="userId"
+                id=""
+                value="<%=payee._id%>"
+                hidden
+              />
+              <div class="col-6">
+                <input
+                  type="radio"
+                  name="payment-method"
+                  value="COC"
+                  required
+                />
+                COC<br />
+                <P style="font-size: small">(Cash On Checking)</P>
+              </div>
+              <div class="col-6">
+                <input type="radio" name="payment-method" /> ONLINE PAYMENT
+              </div>
+              <div class="col-12">
+                <button class="btn btn-primary w-100 py-3" type="submit" id="sub">
+                  Book
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+      <script>
+        $("#checkout").submit((e) => {
+          e.preventDefault();
+          $.ajax({
+            url: "/payment",
+            method: "put",
+            data: $("#checkout").serialize(),
+            success: ((res) => {
+              if (res.codSuccess) {
+                location.href = '/success';
+                console.log("daaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa1");
+              } else {
+                razorpayPayment(res.response);
+                
+              }
+            }),
+          });
+        });
+        function razorpayPayment(order) {
+          var options = {
+            key: "rzp_test_dr9PeWUXhd75Ha", // Enter the Key ID generated from the Dashboard
+            amount: 1000 * 100, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+            currency: "INR",
+            name: "CARE CLINICK",
+            description: "Test Transaction",
+            image: "https://icones.pro/wp-content/uploads/2022/03/icone-de-l-hopital-bleu.png",
+            order_id: order.id, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
+            handler: function (response) {
+              alert(response.razorpay_payment_id);
+              alert(response.razorpay_order_id);
+              alert(response.razorpay_signature);
+
+              verifyPayment(response,order);
+            },
+            prefill: {
+              name: "CareClinick",
+              email: "CareClinick@gmail.com",
+              contact: "7736314029",
+            },
+            notes: {
+              address: "CARE CLINICK HEALTH CARE",
+            },
+            theme: {
+              color: "#3399cc",
+            },
+          };
+
+          var rzp1 = new Razorpay(options);
+          rzp1.on("payment.failed", function (response) {
+            alert(response.error.code);
+            alert(response.error.description);
+            alert(response.error.source);
+            alert(response.error.step);
+            alert(response.error.reason);
+            alert(response.error.metadata.order_id);
+            alert(response.error.metadata.payment_id);
+          });
+            rzp1.open();
+        }
+        function verifyPayment(payment, order){
+          $.ajax({
+            url: "/verify-payment",
+            data: {
+              payment,
+              order,
+            },
+            method: "put",
+            success: ((response) => {
+              if (response.status){
+                location.href = "/success";
+              } else {
+                alert("payment is failure");
+              }
+            }),
+          });
+        }
+      </script>
+      <!-- footer -->
+      <%- include('../partials/footer.ejs') %>
+    </div>
+  </div>
+</div>

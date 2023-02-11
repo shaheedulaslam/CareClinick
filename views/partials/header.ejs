@@ -33,7 +33,10 @@
             <p class="dropdown-item">Doctors  <span class="badge rounded-pill badge-notification bg-primary"><%=doccount%></span></p>
           </li>
           <li>
-            <a class="dropdown-item" href="/appointlists">Appointments  <span class="badge rounded-pill badge-notification bg-primary"><%=appointcount%></span></a>
+            <a class="dropdown-item mb-3" href="/appointlists">Appointments  <span class="badge rounded-pill badge-notification bg-primary"><%=appointcount%></span></a>
+          </li>
+          <li>
+            <a class="dropdown-item" href="/medical-Reports">Medical Reports  <span class="badge rounded-pill badge-notification bg-primary"><%=reports%> </span></a>
           </li>
         </ul>
       </li>
@@ -41,8 +44,7 @@
         </div>
         <% if(user){ %>
                 <div class="nav-item dropdown">
-                  <img
-                    src="https://mdbcdn.b-cdn.net/img/new/avatars/2.webp"
+                  <img src="https://mdbcdn.b-cdn.net/img/new/avatars/2.webp"
                     class="rounded-circle justify-content-center"
                     height="25"
                     alt=""

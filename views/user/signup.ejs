@@ -1,0 +1,136 @@
+
+<section class="vh-100" style="background-color: #eee;">
+    <div class="container h-100">
+      <div class="row d-flex justify-content-center align-items-center h-100">
+        <div class="col-lg-12 col-xl-11">
+          <div class="card text-black" style="border-radius: 25px;">
+            <div class="card-body p-md-5">
+              <div class="row justify-content-center">
+                <div class="col-md-10 col-lg-6 col-xl-5 order-2 order-lg-1">
+
+                 <h1 class="m-0 text-primary text-center"><i class="far fa-hospital me-3"></i>Care Clinic</h1>
+                  <p class="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-4">Sign up</p>
+  
+                  <form class="mx-1 mx-md-4" action="<%-base_url%>/signup" method="post" onsubmit="validateForm()">
+                    <div class="d-flex flex-row align-items-center mb-4">
+                      <i class="fas fa-user fa-lg me-3 fa-fw"></i>
+                      <div class="form-outline flex-fill mb-0">
+                        <input type="text" id="name" class="form-control" name="name" placeholder="Your Name" required/>
+                      </div>
+                    </div>
+  
+                    <div class="d-flex flex-row align-items-center mb-4">
+                      <i class="fas fa-envelope fa-lg me-3 fa-fw"></i>
+                      <div class="form-outline flex-fill mb-0">
+                        <input type="email" id="email" class="form-control"name="email" placeholder="Your Email" required/>
+                      </div>
+                    </div>
+
+
+
+                    <div class="passContainer">
+                    <div class="d-flex flex-row align-items-center mb-4">
+                      <i class="fas fa-lock fa-lg me-3 fa-fw"></i>
+                      <div class="form-outline flex-fill mb-0">
+                        <div class="password-container w-100">
+                         <input type="password" id="password" class="form-control" name="password" placeholder="password"  pattern="^(?=.*[a-z]).{8,}$" required/>
+                         <label style="font-size:x-small">(must include small letters(a-z),(8)characters)</label>
+                         <i class="fa-solid fa-eye" id="eye"></i>
+                        </div>
+                       <div class="passwordValidator" style="display:none"></div>
+                      </div>
+                      <div id="showErrpwd"></div>
+                    </div>
+  
+                    <div class="d-flex flex-row align-items-center mb-4">
+                      <i class="fas fa-key fa-lg me-3 fa-fw"></i>
+                      <div class="form-outline flex-fill mb-0">
+                        <input type="password" id="confirmPass" class="form-control"  value="" name="confirmPass" placeholder="confirm password" required/>
+                        
+                        <span id="message2" style="color: red;"></span><br>
+                        <span id="message1" style="color: green;"></span>
+
+                        <div id="showErrcpwd"> </div>
+                      </div>
+                    </div>
+                  </div>
+  
+                    <div class="form-check d-flex justify-content-center mb-5">
+                      <input class="form-check-input me-2" type="checkbox" value="" id="checking"  required/>
+                      <label class="form-check-label" for="form2Example3">
+                        I agree all statements in <a href="#!">Terms of service</a>
+                      </label>
+                    </div>
+  
+                    <div class="d-flex justify-content-center mx-4 mb-3 mb-lg-4">
+                      <button type="submit" class="btn btn-primary btn-lg" value="Submit" id="submit">Register</button>
+                    </div>
+                  </form>
+                  <a href="/login">Already have an Account ?</a>
+  
+                </div>
+                <div class="col-md-10 col-lg-6 col-xl-7 d-flex align-items-center order-1 order-lg-2">
+  
+                  <img src="https://png.pngtree.com/element_our/20200610/ourlarge/pngtree-online-doctor-consultation-image_2248276.jpg"
+                    class="img-fluid" alt="Sample image">
+  
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- js --------------- -->
+  <script>
+    function validateForm(){
+    var pw1 = document.getElementById("password").value;
+     var pw2 = document.getElementById("confirmPass").value;
+    
+     if(pw1==""){
+         document.getElementById("message1").textContent = "**Fill the password Please!";
+         return false;
+     }else if(pw2==""){
+         document.getElementById("message2").textContent = "**Enter The password Please!";
+         return false;
+     }else if(pw1!=pw2){
+           document.getElementById("message2").textContent = "**Password are not same";
+          return false;
+     }else{
+         alert("Your Password Created Successfully");
+     }
+
+ }
+
+
+const passwordInput = document.getElementById("password");
+const eye = document.getElementById("eye");
+
+eye.addEventListener("click", function(){
+  this.classList.toggle("fa-eye-slash")
+  const type = passwordInput.getAttribute("type") === "password" ? "text" : "password"
+  passwordInput.setAttribute("type", type)
+})
+</script>
+
+<style>
+  .password-container{
+  width: 400px;
+  position: relative;
+}
+.password-container input[type="password"],
+.password-container input[type="text"]{
+  width: 100%;
+  padding: 12px 36px 12px 12px;
+  box-sizing: border-box;
+}
+.fa-eye{
+  position: absolute;
+  top: 28%;
+  right: 4%;
+  cursor: pointer;
+  color: lightgray;
+}
+</style>

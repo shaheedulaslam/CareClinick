@@ -1,0 +1,183 @@
+<!-- Spinner Start -->
+<div id="spinner" class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
+    <div class="spinner-grow text-primary" style="width: 3rem; height: 3rem;" role="status">
+        <span class="sr-only">Loading...</span>
+    </div>
+</div>
+<!-- Spinner End -->
+ <!-- Navbar Start -->
+ <header>
+    <nav class="navbar navbar-expand-lg bg-white navbar-light sticky-top p-0 wow fadeIn" data-wow-delay="0.1s">
+        <a href="index.html" class="navbar-brand d-flex align-items-center px-4 px-lg-5">
+            <h1 class="m-0 text-primary"><i class="far fa-hospital me-3"></i>Care Clinic</h1>
+        </a>
+        <button type="button" class="navbar-toggler me-4" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarCollapse">
+            <div class="navbar-nav ms-auto p-4 p-lg-0">
+                <a href="/" class="nav-item nav-link active">Home</a>
+                <a href="/about" class="nav-item nav-link">About</a>
+                <a href="/contactus" class="nav-item nav-link">Contact</a>
+            </div>
+            
+                    <!-- <div class="nav-item dropdown">
+                      <img
+                        src="https://mdbcdn.b-cdn.net/img/new/avatars/2.webp"
+                        class="rounded-circle justify-content-center"
+                        height="25"
+                        alt=""
+                        loading="lazy"
+                      />
+                      <div class="dropdown-menu rounded-0 rounded-bottom m-0">
+                          <a href="/profile" class="dropdown-item">Your Profile</a>
+                          <a href="/logout" class="dropdown-item">Logout</a>
+                      </div>
+                  </div> -->
+                  </div>
+                </div>
+            
+            <!-- <a href="/appointment" class="btn btn-primary rounded-0 py-4 px-lg-5 d-none d-lg-block">Appointment<i class="fa fa-arrow-right ms-3"></i></a> -->
+        </div>
+    </nav>
+    </header>
+ <!-- Appointment Start -->
+    <div class="container-xxl py-5">
+        <div class="container">
+            <div class="row g-5">
+                <div class="col-lg-6 wow fadeInUp" data-wow-delay="0.1s">
+                    <p class="d-inline-block border rounded-pill py-1 px-4">Appointment</p>
+                    <h1 class="mb-4">Make An Appointment To Visit Our Doctor</h1>
+                    <div class="bg-light rounded d-flex align-items-center p-5 mb-4">
+                        <div class="d-flex flex-shrink-0 align-items-center justify-content-center rounded-circle bg-white" style="width: 55px; height: 55px;">
+                            <i class="fa fa-phone-alt text-primary"></i>
+                        </div>
+                        <div class="ms-4">
+                            <p class="mb-2">Call Us Now</p>
+                            <h5 class="mb-0">+012 345 6789</h5>
+                        </div>
+                    </div>
+                    <div class="bg-light rounded d-flex align-items-center p-5">
+                        <div class="d-flex flex-shrink-0 align-items-center justify-content-center rounded-circle bg-white" style="width: 55px; height: 55px;">
+                            <i class="fa fa-envelope-open text-primary"></i>
+                        </div>
+                        <div class="ms-4">
+                            <p class="mb-2">Mail Us Now</p>
+                            <h5 class="mb-0">CareClinic@gmail.com</h5>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6 wow fadeInUp" data-wow-delay="0.5s">
+                    <div class="bg-light rounded h-100 d-flex align-items-center p-5">
+                        <form action="/appointment" method="post" id="frm" onsubmit="return submitfrm(this)">
+                            <div class="row g-3">
+                                <div class="col-12 col-sm-6">
+                                    <input type="text" class="form-control border-0" placeholder="Your Name"  name="name" style="height: 55px;" required>
+                                </div>
+                                <div class="col-12 col-sm-6">
+                                    <input type="email" class="form-control border-0" placeholder="Your Email" name="email" style="height: 55px;" required>
+                                </div>
+                                <div class="col-12 col-sm-6">
+                                    <input type="tel" class="form-control border-0" placeholder="Phone number" pattern="[0-9]{3}[0-9]{3}[0-9]{4}"  name="ph" style="height: 55px;" required>
+                                    <span class="validity"></span>
+                                    <style>
+                                        input + span {
+                                        padding-right: 30px;
+                                        }
+                                        input:invalid + span::after {
+                                        position: absolute;
+                                        content: "×";
+                                        padding-left: 5px;
+                                        color: #8b0000;
+                                        }
+
+                                        input:valid + span::after {
+                                        position: absolute;
+                                        content: "✓";
+                                        padding-left: 5px;
+                                        color: #009000;
+                                        }
+                                    </style>
+                                </div>
+                                <div class="col-12 col-sm-6">
+                                    <div class="date" id="date" data-target-input="nearest">
+                                        <input type="date"
+                                            class="form-control border-0 datepicker-input"
+                                            placeholder="Choose Date" data-target="#date" data-toggle="datepicker" name="date" id="date" min="2023-01-01" style="height: 55px;" required>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-sm-6">
+                                    <input type="number" class="form-control border-0" placeholder=" Your Age"  name="Age"  maxlength="3" style="height: 55px;"  required>
+                                </div>
+                                <div class="col-12 d-flex">
+                                    <select class="form-select border-0" style="height: 55px;" id="speciality"  onchange="selectDoc(this)" name="speciality" required>
+                                        <%result.forEach(el=>{%> 
+                                        <option selected hidden>Choose Specilist</option> 
+                                        <option><%=el.speciality%></option>
+                                        <%}) %> 
+                                    </select> 
+                                    <div id="doctor" class="col-6 d-flex"></div>
+                                </div>
+                                <div class="col-12">
+                                    <textarea class="form-control border-0" rows="5" placeholder="Your disease" name="diseases" required></textarea>
+                                </div>
+                                <div class="col-12">
+                                    <button class="btn btn-primary w-100 py-3" type="submit">Book Appointment</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>       
+        function submitfrm(form){
+            const Toast = Swal.mixin({
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false,
+            timer: 5000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+            toast.addEventListener('mouseenter', Swal.stopTimer)
+            toast.addEventListener('mouseleave', Swal.resumeTimer)
+            }
+            })
+
+            Toast.fire({
+            icon: 'success',
+            title: 'You Will GET Payment Link On your Email'
+            })
+          .then((isOkay)=>{
+            if(isOkay){
+                form.submit();
+            }
+          })
+          return false
+    }
+        function selectDoc(e){
+            $.ajax({
+                url:'/selected',
+                method:'post',
+                data:{
+                  speciality:e.value
+                },
+                success:((res)=>{
+                   console.log('logg',res);
+                    document.getElementById('doctor').innerHTML='<select name="dr" id="doctors" class = "form-select border-0 ms-3"></select>'
+                   res.doc.forEach((element,i)=> {
+                    document.getElementById('doctors').innerHTML+=`
+                    <option selected hidden>Choose Specilist</option>
+                    <option value="${res.doc[i]._id}">'${res.doc[i].name}'</option>`
+                   });
+                })
+            })
+        }
+    </script>
+    
+    
+    <%- include('../partials/footer.ejs') %>
+    <!-- Appointment End -->
+   

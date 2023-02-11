@@ -1,0 +1,52 @@
+<!-- Spinner Start -->
+<div id="spinner" class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
+    <div class="spinner-grow text-primary" style="width: 3rem; height: 3rem;" role="status">
+        <span class="sr-only">Loading...</span>
+    </div>
+</div>
+<!-- Spinner End -->
+
+<%- include('../partials/headerdoctor.ejs') %>
+        <!-- doctors lists -->
+        <div class="container-fluid pt-4 px-4">
+            <h2 class="mb-3 text-center">Consulted Appointments</h2>
+            <div class="bg-light text-center rounded p-4">
+                <div class="d-flex align-items-center justify-content-between mb-4">
+                    
+                    <a href="">Show All</a>
+                </div>
+                <div class="table-responsive">
+                    <table class="table text-start align-middle table-bordered table-hover mb-0">
+                        
+                        <thead>
+                            <div class="d-flex justify-content-around">
+                            <a href="/doctor" class="btn btn-primary">Today</a>
+                            <a href="/doctor/doc-upcomingappoint" class="btn btn-primary">Upcoming</a>
+                            <!-- <a href="/doctor/doctorconsulted" class="btn btn-primary">Consulted</a> -->
+                        </div>
+                        </thead>
+                    </div>
+                        <thead>
+                            <tr class="text-dark">
+                                <th scope="col"> Patient Name</th>
+                                <th scope="col">Age</th>
+                                <th scope="col">disease</th>
+                                <th scope="col">Phone</th>
+                                <th scope="col">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <%consulted.forEach(el=>{%> 
+                            <tr>
+                                <td><%= el.name%></td>
+                                <td><%= el.Age%></td>
+                                <td><%= el.diseases%></td>
+                                <td><%= el.ph %> </td>
+                                <td><p class="text-success">Consulted</p></td>
+                            </tr>
+                            <% }) %> 
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>

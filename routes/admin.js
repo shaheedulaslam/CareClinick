@@ -16,8 +16,7 @@ const { getadminhome,
         activedocget,
         nonactivedocget,
         patientsget,
-        Logout,
-        adminprofile} = require('../controllers/adminControllers');
+        Logout} = require('../controllers/adminControllers');
 const router = express.Router();
 
  

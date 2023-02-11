@@ -1,0 +1,138 @@
+<!-- Spinner Start -->
+<div id="spinner"
+    class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
+    <div class="spinner-grow text-primary" style="width: 3rem; height: 3rem;" role="status">
+        <span class="sr-only">Loading...</span>
+    </div>
+</div>
+<!-- Spinner End -->
+<%- include('../partials/headerdoctor.ejs') %>
+<!-- content -->
+<div class="container-xl px-4 mt-4">
+    <!-- Account page navigation-->
+    <div class="row">
+        <form action="/doctor/editdocProfile/<%=doc._id%>" method="post" enctype="multipart/form-data">
+          <div class="col-xl-8">
+            <!-- Account details card-->
+            <div class="card mb-4">
+                <div class="card-header">Account Details</div>
+                <div class="card-body">
+                    <div class="col-mb-4">
+                        <!-- ibadnnnnn -->
+                        <div class="container">
+                            <h5 class="text-center">Upload Image</h5>
+                            <div class="avatar-upload">
+                                <div class="avatar-edit">
+                                    <input type='file' id="imageUpload" name="image"/>
+                                    <label for="imageUpload"></label>
+                                </div>
+                                <div class="avatar-preview">
+                                    <div id="imagePreview" style="background-image: url('/images/<%=doc.image%>');">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <style>
+                           
+                        .avatar-upload {
+                        position: relative;
+                        max-width: 205px;
+                        margin: 50px auto;
+                        }
+                        .avatar-upload .avatar-edit {
+                        position: absolute;
+                        right: 12px;
+                        z-index: 1;
+                        top: 10px;
+                        }
+                        .avatar-upload .avatar-edit input {
+                        display: none;
+                        }
+                        .avatar-upload .avatar-edit input + label {
+                        display: inline-block;
+                        width: 34px;
+                        height: 34px;
+                        margin-bottom: 0;
+                        border-radius: 100%;
+                        background: #009cff;
+                        border: 1px solid transparent;
+                        box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.12);
+                        cursor: pointer;
+                        font-weight: normal;
+                        transition: all 0.2s ease-in-out;
+                        }
+                        .avatar-upload .avatar-edit input + label:hover {
+                        background: #f1f1f1;
+                        border-color: #d6d6d6;
+                        }
+                        .avatar-upload .avatar-edit input + label:after {
+                        content: "\f040";
+                        font-family: 'FontAwesome';
+                        color: #110f0f;
+                        position: absolute;
+                        top: 7px;
+                        left: 0;
+                        right: 0;
+                        text-align: center;
+                        margin: auto;
+                        }
+                        .avatar-upload .avatar-preview {
+                        width: 192px;
+                        height: 192px;
+                        position: relative;
+                        border-radius: 100%;
+                        border: 6px solid #009cff;
+                        box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.1);
+                        }
+                        .avatar-upload .avatar-preview > div {
+                        width: 100%;
+                        height: 100%;
+                        border-radius: 100%;
+                        background-size: cover;
+                        background-repeat: no-repeat;
+                        background-position: center;
+                        }
+
+                        </style>
+                        <div class="mb-3">
+                        <input class="form-control" name="name" type="text" placeholder="Your name" value="<%=doc.name%>" required>
+                    </div>
+                    <!-- Form Row-->
+                    <div class="row gx-3 mb-3">
+                        <!-- Form Group (first name)-->
+                        <div class="col-md-6">
+                            <input class="form-control" name="email" type="email" placeholder="Your Email" value="<%=doc.email%>" required>
+                        </div>
+                        <!-- Form Group (last name)-->
+                        <div class="col-md-6">
+                            <input class="form-control" type="text" name="speciality" placeholder="Your Speciality" value="<%=doc.speciality%>" required>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <input type="text" class="form-control" name="qualification" placeholder="Your qualification" value="<%=doc.qualification%>" required>
+                    </div> 
+                    <!-- Save changes button-->
+                    <button class="btn btn-primary" type="submit">Save changes</button>
+                </div>
+             </div>
+          </div>
+       </div>
+      </form>
+   </div>
+</div>
+<script>
+    function readURL(input) {
+    if (input.files && input.files[0]) {
+        var reader = new FileReader();
+        reader.onload = function(e) {
+            $('#imagePreview').css('background-image', 'url('+e.target.result +')');
+            $('#imagePreview').hide();
+            $('#imagePreview').fadeIn(650);
+        }
+        reader.readAsDataURL(input.files[0]);
+    }
+}
+$("#imageUpload").change(function() {
+    readURL(this);
+});
+</script>

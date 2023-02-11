@@ -20,7 +20,7 @@ module.exports = {
         adddoctorsmodel
           .find()
           .then((doctorslists) => {
-            res.render("adminpanel", {
+            res.render("admin/adminpanel", {
               doctorslists,
               doccount,
               patcount,
@@ -37,6 +37,7 @@ module.exports = {
       }
     } catch (error) {
       console.log(error);
+      res.redirect('/404error')
     }
   },
   adminLogin: (req, res) => {
@@ -46,11 +47,12 @@ module.exports = {
       } else {
         let errmessage = req.session.adminlog;
         req.session.adminlog = null;
-        res.render("adminlogin", { user: false, admin: false,errmessage});
+        res.render("admin/adminlogin", { user: false, admin: false,errmessage});
         errmessage = null
       }
     } catch (error) {
       console.log(error);
+      res.redirect('/404error')
     }
   },
   adminpost: async(req, res) => {
@@ -68,6 +70,7 @@ module.exports = {
       }
     } catch (error) {
       console.log(error);
+      res.redirect('/404error')
     }
     // try {
     //   const reqmail = req.body.email;
@@ -87,46 +90,73 @@ module.exports = {
     // }
   },
   userget:async(req, res) => {
-    const adminId = req.session.admin;
-    const admin =  await adminmodel.findOne({_id:adminId})
-    Usermodel.find()
-      .then((userlists) => {
-        res.render("adminuserlist", { userlists,admin});
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    try {
+      if(req.session.admin){
+      const adminId = req.session.admin;
+      const admin =  await adminmodel.findOne({_id:adminId})
+      Usermodel.find()
+        .then((userlists) => {
+          res.render("admin/adminuserlist", { userlists,admin});
+        })
+      }else{
+        res.redirect('/admin/adminlogin')
+      }
+    } catch (error) {
+      console.log(error);
+      res.redirect('/404error')
+    }
+
   },
   patientsget:async (req, res) => {
     try {
+      if(req.session.admin){
       const adminId = req.session.admin;
       const admin =  await adminmodel.findOne({_id:adminId})
       appointmodel
         .find()
         .then((patientlist) => {
-          res.render("adminpatients", { patientlist,admin });
+          res.render("admin/adminpatients", { patientlist,admin });
         })
-        .catch((err) => {
-          console.log(err);
-        });
+      }else{
+        res.redirect('/admin/adminlogin');
+      }
     } catch (error) {
       console.log(error);
+      res.redirect('/404error')
     }
   },
   appointmentget: async (req, res) => {
-    const adminId = req.session.admin;
-    const admin =  await adminmodel.findOne({_id:adminId})
-   const docname =  await adddoctorsmodel.find()
-      appointmodel.find().then((adminappointlist) => {
-          res.render("adminappointment", { adminappointlist, docname,admin });
-        }).catch((err) => {
-        console.log(err);
-      });
+    try {
+      if(req.session.admin){
+      const adminId = req.session.admin;
+      const admin =  await adminmodel.findOne({_id:adminId})
+      await  appointmodel.find().populate('doctor').then((adminappointlist) => {
+        console.log(adminappointlist[0].doctor,"okdone");
+            res.render("admin/adminappointment", { adminappointlist,admin });
+          })
+        }else{
+          res.redirect('/admin/adminlogin')
+        }
+    } catch (error) {
+      console.log(error);
+      res.redirect('/404error')
+    }
+   
   },
   adddoctorget:async (req, res) => {
-    const adminId = req.session.admin;
-    const admin =  await adminmodel.findOne({_id:adminId})
-    res.render("adddoctors",{admin});
+    try {
+      if(req.session.admin){
+      const adminId = req.session.admin;
+      const admin =  await adminmodel.findOne({_id:adminId})
+      res.render("admin/adddoctors",{admin});
+      }else{
+        res.redirect('/admin/adminlogin')
+      }
+    } catch (error) {
+      console.log(error);
+      res.redirect('/404error')
+    }
+   
   },
   adddoctorpost: (req, res) => {
     try {
@@ -148,22 +178,27 @@ module.exports = {
           console.log("doctor added");
           res.redirect("/admin/admindoctor");
         })
-        .catch((error) => {
-          console.log(error);
-        });
     } catch (error) {
       console.log(error);
+      res.redirect('/404error')
     }
   },
   doctorget:async(req, res) => {
+    try {
+      if(req.session.admin){
     const adminId = req.session.admin;
     const admin =  await adminmodel.findOne({_id:adminId})
-      adddoctorsmodel.find().then((doctorslist) => {
-          res.render("admindoctor", { doctorslist,admin });
+     await adddoctorsmodel.find().then((doctorslist) => {
+          res.render("admin/admindoctor", { doctorslist,admin });
         })
-        .catch((err) => {
-          console.log(err);
-        });
+      }else{
+        res.redirect('/admin/adminlogin')
+      }
+    } catch (error) {
+      console.log(error);
+      res.redirect('/404error')
+    }
+    
   },
   blockget: async (req, res) => {
     try {
@@ -173,6 +208,7 @@ module.exports = {
       res.redirect("/admin/adminuserlist");
     } catch (error) {
       console.log(error);
+      res.redirect('/404error')
     }
   },
   unblockget: async (req, res) => {
@@ -183,22 +219,31 @@ module.exports = {
       res.redirect("/admin/adminuserlist");
     } catch (error) {
       console.log(error);
+      res.redirect('/404error')
     }
   },
   editdoctorget: async (req, res) => {
-    const adminId = req.session.admin;
-    const admin =  await adminmodel.findOne({_id:adminId})
-    let edId = req.params.id;
-    console.log(edId);
-    adddoctorsmodel.findOne({ _id: edId }).then((editdoc) => {
-        res.render("doctorsedit", { editdoc,admin });
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    try {
+      if(req.session.admin){
+      const adminId = req.session.admin;
+      const admin =  await adminmodel.findOne({_id:adminId})
+      let edId = req.params.id;
+      console.log(edId);
+      adddoctorsmodel.findOne({ _id: edId }).then((editdoc) => {
+          res.render("admin/doctorsedit", { editdoc,admin });
+        })
+      }else{
+        res.redirect('/admin/adminlogin')
+      }
+    } catch (error) {
+      console.log(error);
+      res.redirect('/404error')
+    }
+   
   },
   posteditdoctor: async (req, res) => {
-    const edId1 = req.params.id;
+    try {
+      const edId1 = req.params.id;
     const name = req.body.name;
     const speciality = req.body.speciality;
     const qualification = req.body.qualification;
@@ -221,11 +266,14 @@ module.exports = {
         console.log(result, "updated");
         res.redirect("/admin");
       })
-      .catch((error) => {
-        console.log(error);
-      });
+    } catch (error) {
+      console.log(error);
+      res.redirect('/404error')
+    }
+    
   },
   deletedoctorsget: (req, res) => {
+    try {
     let docId = req.params.id;
     console.log(docId);
     adddoctorsmodel
@@ -234,11 +282,13 @@ module.exports = {
         console.log(result + "doctor deleted");
         res.redirect("/admin");
       })
-      .catch((err) => {
-        console.log(err);
-      });
+    } catch (error) {
+      console.log(error);
+      res.redirect('/404error')
+    }  
   },
   deletepatientget: (req, res) => {
+    try {
     let patieId = req.params.id;
     console.log(patieId);
     appointmodel
@@ -247,9 +297,11 @@ module.exports = {
         console.log(result);
         res.redirect("/admin/adminpatients");
       })
-      .catch((err) => {
-        console.log(err);
-      });
+    } catch (error) {
+      console.log(error);
+      res.redirect('/404error')
+    }
+    
   },
   activedocget: async (req, res) => {
     try {
@@ -259,6 +311,7 @@ module.exports = {
       res.redirect("/admin/admindoctor");
     } catch (error) {
       console.log(error);
+      res.redirect('/404error')
     }
   },
   nonactivedocget: async (req, res) => {
@@ -269,6 +322,7 @@ module.exports = {
       res.redirect("/admin/admindoctor");
     } catch (error) {
       console.log(error);
+      res.redirect('/404error')
     }
   },
   Logout: (req, res) => {
