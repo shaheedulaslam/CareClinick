@@ -21,21 +21,21 @@
             <a href="/admin/adminuserlist" class="nav-item nav-link"><i class="fa fa-user"></i>Users</a>
             <a href="/admin/adminpatients" class="nav-item nav-link"><i class="fa fa-wheelchair"></i>Patients</a>
             <a href="/admin/adminappointment" class="nav-item nav-link"><i class="fas fa-edit"></i>Appointments</a>
-            <a href="#" class="nav-item nav-link"  data-toggle="modal" data-target="#myModal<%=admin._id%>"><i class="fas fa-wallet me-2"></i>Wallet<br><span>Rs: <%=admin.wallet%> </span></a>
+            <a href="#" class="nav-item nav-link"  data-toggle="modal" data-target="#myModal"><i class="fas fa-wallet me-2"></i>Wallet<br><span>Rs:  </span></a>
         </div>
     </nav>
 </div>
 <!-- Sidebar End -->
   <!-- modal -->
 
-  <div class="modal fade" id="myModal<%=admin._id%>" role="dialog">
+  <div class="modal fade" id="myModal" role="dialog">
     <div class="modal-dialog">
         <div class="card">
                <div class="card-title text-center">
-                   <h2><%=admin.name%></h2>
+                   <h2></h2>
                </div>
                <div class="card-text text-center">
-                   <h4>Balance: <%=admin.wallet%></h4>
+                   <h4>Balance: </h4>
                </div>
            </div>
     </div>

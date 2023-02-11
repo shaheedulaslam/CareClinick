@@ -9,7 +9,8 @@ module.exports = {
     try {
       if (req.session.admin) {
         const adminId = req.session.admin;
-        const admin =  await adminmodel.findOne({_id:adminId})
+        const admin1 =  await adminmodel.findOne({_id:adminId});
+        console.log(admin1);
         const appointcount = await appointmodel.count();
         const patcount = await appointmodel.count();
         const doccount = await adddoctorsmodel.count();
@@ -26,7 +27,7 @@ module.exports = {
               patcount,
               appointcount,
               msg,
-              admin
+              admin1
             });
           })
           .catch((err) => {
