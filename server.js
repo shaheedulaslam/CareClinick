@@ -61,7 +61,7 @@ const mongoose = require('mongoose')
 const User = require('./models/user')
 // mongoose.connect(process.env.DATABASE_URL,{
 //     useNewUrlParser: true })
-mongoose.connect('mongodb://127.0.0.1:27017/ClinicManagement')
+mongoose.connect(process.env.MONGO_URL)
 const db = mongoose.connection
 db.on('error', error => console.error(error))
 db.once('open', () => console.log('Connected to mongooose'))
