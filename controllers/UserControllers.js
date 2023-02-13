@@ -462,7 +462,7 @@ module.exports = {
                         to:[users.email],
                         from: process.env.user,
                         subject:'Password Reset',
-                        html:`<h4>To reset Your Password <a href="http://localhost:3000/resetPassword/${users._id}">Click Here</a>`
+                        html:`<h4>To reset Your Password <a href="${process.env.APP_URL}/resetPassword/${users._id}">Click Here</a>`
                     })  
                 }else{
                     res.redirect('/forgetpassword')

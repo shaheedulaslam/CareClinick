@@ -246,7 +246,7 @@ module.exports = {
       to:resp.email,
       from:'careclinick@gmail.com',
       subject:'Pay to place Appointment',
-      html:`<h3>To book your Appointment Completely  <a href="http://localhost:3000/payment/${resp._id}/${resp.doctor}">Click here</a>  to Pay and Consult</h3>`
+      html:`<h3>To book your Appointment Completely  <a href="${process.env.APP_URL}/payment/${resp._id}/${resp.doctor}">Click here</a>  to Pay and Consult</h3>`
      
     })
     } catch (error) {
@@ -373,7 +373,7 @@ module.exports = {
             to:[doctor.email],
             from:process.env.user,
             subject:'Doctor Password Reset',
-            html:`<h4>Doctor..,To reset Your Password: <a href="http://localhost:3000/doctor/reset-docPassword/${doctor._id}">Click Here</a>`
+            html:`<h4>Doctor..,To reset Your Password: <a href="${process.env.APP_URL}/doctor/reset-docPassword/${doctor._id}">Click Here</a>`
           })
         }else{
           res.redirect('/doctor/doc-forgetPassword')
