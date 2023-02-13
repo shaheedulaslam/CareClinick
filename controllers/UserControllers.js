@@ -219,8 +219,6 @@ module.exports = {
             await user.save().then((doc) => {
                 req.session.logg = doc
                 res.redirect('/');
-            }).catch(err=>{
-                console.log(err);
             })
         } else {
             res.redirect('/verify')
@@ -234,7 +232,6 @@ module.exports = {
     },
     getpayment:async(req,res)=>{
         try {
-            if(req.session.logg){
             const payId = req.params.id;
             const dctr =  req.params.dr;
             console.log(dctr,"uuuuuuuuu");
@@ -243,9 +240,6 @@ module.exports = {
                 console.log(payee,"aaaa okkk");
                 res.render('user/payment',{payee,dctr})
             })
-            }else{
-                res.redirect('/login')
-            }   
         } catch (error) {
             console.log(error);
             res.redirect('/404error');
@@ -312,7 +306,6 @@ module.exports = {
               res.json({status:true})
             }).catch((e)=>{
                 res.json({status:false})
-                // next(new Error(e))
                 console.log(e);
                
             })

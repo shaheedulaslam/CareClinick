@@ -30,9 +30,6 @@ module.exports = {
               admin1
             });
           })
-          .catch((err) => {
-            console.log(err);
-          });
       } else {
         res.redirect("/admin/adminlogin");
       }
@@ -244,7 +241,7 @@ module.exports = {
   },
   posteditdoctor: async (req, res) => {
     try {
-      const edId1 = req.params.id;
+    const edId1 = req.params.id;
     const name = req.body.name;
     const speciality = req.body.speciality;
     const qualification = req.body.qualification;
