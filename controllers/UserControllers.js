@@ -211,7 +211,8 @@ module.exports = {
     },
     postOtpverify: async (req, res) => {
         try {
-            const {name, email, password, confirmPass, token } = req.session.signup;
+             const {name, email, password, confirmPass, token } = req.session.signup;
+            // const {name, email, password, confirmPass, token }
         if (token == req.body.otp) {
             const user = new Usermodel({name, email, password })
             console.log(user);

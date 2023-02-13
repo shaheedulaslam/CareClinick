@@ -42,7 +42,7 @@ app.set("views", path.join(__dirname, 'views'));
 app.set('layout', 'layouts/layout')
 app.use(expressLayouts);
 app.use(express.static('public'));
-app.use(session({ secret: "ABCD", cookie: { maxAge: 600000000 } }))
+app.use(session({ secret: "ABCD", cookie: { maxAge: 600000000 },saveUninitialized:true,resave:false}))
 //cache clearing... 
 app.use(function (req, res, next) {
     res.header('Cache-Control', 'private, no-cache, no-store, must-revalidate');
