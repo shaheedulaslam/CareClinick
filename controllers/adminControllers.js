@@ -132,7 +132,7 @@ module.exports = {
       const adminId = req.session.admin;
       const admin =  await adminmodel.findOne({_id:adminId})
       await  appointmodel.find().populate('doctor').then((adminappointlist) => {
-        console.log(adminappointlist[0].doctor,"okdone");
+        // console.log(adminappointlist[0].doctor,"okdone");
             res.render("admin/adminappointment", { adminappointlist,admin });
           })
         }else{
